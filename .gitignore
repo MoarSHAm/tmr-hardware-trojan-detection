@@ -1,0 +1,21 @@
+# Simulation
+*.vcd
+*.fst
+
+# Build artifacts
+*.json
+*.asc
+*.bin
+
+# Yosys / nextpnr
+*_yosys.log
+*_nextpnr.log
+
+# Editor junk
+*.swp
+*.bak
+*~
+
+# OS junk
+.DS_Store
+

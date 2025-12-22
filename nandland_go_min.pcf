@@ -1,0 +1,4 @@
+# Phase 4.1 — Single LED sanity test
+# iCE40 HX1K TQ144
+
+set_io led_fault PIO8
