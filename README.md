@@ -2,7 +2,7 @@
 
 This project implements and evaluates a **Triple Modular Redundancy (TMR)** system enhanced with a **temporal anomaly monitor** to detect stealthy hardware Trojans that bypass traditional majority voting.
 
-Implementation is done at RTL level in Verilog and validated through simulation and waveform analysis.
+The Implementation is done at RTL level in Verilog and validated through simulation and waveform analysis.
 
 ---
 
