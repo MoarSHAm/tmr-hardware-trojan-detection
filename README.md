@@ -33,3 +33,61 @@ The design consists of:
   - tracks mismatch history across cycles
   - raises suspicion only after persistent abnormal behavior
 
+---
+
+## Temporal Detection Principle
+
+Instead of reacting to single-cycle mismatches, the monitor observes replica behavior across time:
+
+1. Detects disagreements between redundant replicas
+2. Accumulates mismatch history across cycles
+3. Tracks consecutive mismatches via a streak counter
+4. Raises suspicion only after persistent abnormal behavior
+
+This allows detection of stealthy Trojans that intentionally evade instantaneous majority voting.
+
+---
+
+## File Overview
+
+| File | Description |
+|------|------------|
+| `tmr_core.v` | Bitwise majority voter |
+| `tmr_monitor.v` | Temporal anomaly monitor |
+| `tmr_trojan_top_mon.v` | Top-level design with Trojan injection |
+| `tmr_trojan_mon_tb.v` | Simulation testbench |
+| `uart_tx_byte.v` | UART transmitter (auxiliary) |
+| `uart_rx_byte.v` | UART receiver (auxiliary) |
+
+Generated artifacts (bitstreams, waveforms, synthesis outputs) are intentionally excluded from version control.
+
+---
+
+## Simulation & Results
+
+Simulation and waveform analysis confirm that:
+
+- Majority voting output remains correct
+- Individual replicas exhibit intermittent mismatches
+- Temporal counters accumulate across cycles
+- Suspicious behavior is flagged only after sustained anomalies
+
+GTKWave traces demonstrate how temporal monitoring reveals attacks invisible to instantaneous logic.
+
+---
+
+## Toolchain
+
+- Verilog HDL  
+- Icarus Verilog  
+- GTKWave  
+- OSS CAD Suite  
+
+---
+
+## Key Takeaway
+
+> **Temporal behavior reveals what instantaneous logic cannot.**
+
+Enhancing TMR with lightweight temporal monitoring significantly improves resilience against stealth hardware Trojans.
+
