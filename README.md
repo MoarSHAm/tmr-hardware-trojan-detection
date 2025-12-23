@@ -2,16 +2,13 @@
 
 This project implements and evaluates a **Triple Modular Redundancy (TMR)** system enhanced with a **temporal anomaly monitor** to detect stealthy hardware Trojans that bypass traditional majority voting.
 
-The Implementation is done at RTL level in Verilog and validated through simulation and waveform analysis.
+The implementation is done at RTL level in Verilog and validated through simulation and waveform analysis.
 
 ---
 
 ## Motivation
 
-Classic TMR systems assume that faults are:
-- transient, or
-- random, or
-- isolated to a single replica
+Classic TMR systems typically assume that faults are transient, random, or isolated to a single replica.
 
 However, **stealth hardware Trojans** can violate these assumptions by:
 - selectively corrupting outputs,
@@ -24,11 +21,11 @@ This project demonstrates how **temporal behavior analysis** can be used to dete
 
 ## High-Level Architecture
 
-The design consists of:
+The design is composed of a conventional TMR datapath augmented with additional monitoring logic:
 
 - **Three redundant data paths** (`r_a`, `r_b`, `r_c`)
 - **Bitwise majority voter** (`tmr_core.v`)
-- **Trojan-injection logic** (in `tmr_trojan_top_mon.v`)
+- **Trojan-injection logic** (`tmr_trojan_top_mon.v`)
 - **Temporal monitor** (`tmr_monitor.v`) that:
   - tracks mismatch history across cycles
   - raises suspicion only after persistent abnormal behavior
@@ -39,12 +36,12 @@ The design consists of:
 
 Instead of reacting to single-cycle mismatches, the monitor observes replica behavior across time:
 
-1. Detects disagreements between redundant replicas
-2. Accumulates mismatch history across cycles
-3. Tracks consecutive mismatches via a streak counter
-4. Raises suspicion only after persistent abnormal behavior
+1. Detects disagreements between redundant replicas  
+2. Accumulates mismatch history across cycles  
+3. Tracks consecutive mismatches via a streak counter  
+4. Raises suspicion only after persistent abnormal behavior  
 
-This allows detection of stealthy Trojans that intentionally evade instantaneous majority voting.
+This enables detection of stealthy Trojans that intentionally evade instantaneous majority voting.
 
 ---
 
@@ -63,31 +60,62 @@ Generated artifacts (bitstreams, waveforms, synthesis outputs) are intentionally
 
 ---
 
-## Simulation & Results
+## Simulation and Evaluation
 
-Simulation and waveform analysis confirm that:
+The design is evaluated using RTL simulation. The testbench injects controlled mismatches to emulate stealthy Trojan behavior that intermittently corrupts one replica.
 
-- Majority voting output remains correct
-- Individual replicas exhibit intermittent mismatches
-- Temporal counters accumulate across cycles
-- Suspicious behavior is flagged only after sustained anomalies
+### Run simulation
 
-GTKWave traces demonstrate how temporal monitoring reveals attacks invisible to instantaneous logic.
+```bash
+iverilog -g2012 \
+  tmr_core.v \
+  tmr_monitor.v \
+  tmr_trojan_top_mon.v \
+  tmr_trojan_mon_tb.v \
+  -o tmr_sim.out
 
----
+vvp tmr_sim.out
+gtkwave tmr_trojan_temporal.vcd
 
-## Toolchain
+
+ ## Toolchain
+
 
 - Verilog HDL  
+
 - Icarus Verilog  
+
 - GTKWave  
+
 - OSS CAD Suite  
 
+
 ---
+
+
+## Observed Results
+
+
+Simulation results show that:
+
+
+- Instantaneous majority voting continues to produce correct outputs
+
+- Replica mismatches occur intermittently over time
+
+- The temporal monitor accumulates mismatch history correctly
+
+- Persistent abnormal behavior is detected even when no single-cycle fault is sufficient
+
+
+Waveform inspection confirms that temporal accumulation reveals attacks invisible to purely combinational logic.
+
+
 
 ## Key Takeaway
 
-> **Temporal behavior reveals what instantaneous logic cannot.**
 
-Enhancing TMR with lightweight temporal monitoring significantly improves resilience against stealth hardware Trojans.
+Temporal behavior reveals what instantaneous logic cannot.
 
+
+Enhancing TMR with lightweight temporal monitoring significantly improves resilience against stealth hardware Trojans without modifying the voting logic itself. 
