@@ -76,6 +76,7 @@ iverilog -g2012 \
 
 vvp tmr_sim.out
 gtkwave tmr_trojan_temporal.vcd
+```
 
 
  ## Toolchain
