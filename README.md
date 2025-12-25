@@ -1,21 +1,23 @@
 # tmr-hardware-trojan-detection
 
-This project implements and evaluates a **Triple Modular Redundancy (TMR)** system enhanced with a **temporal anomaly monitor** to detect stealthy hardware Trojans that bypass traditional majority voting.
+This project implements and evaluates a **Triple Modular Redundancy (TMR)** system augmented with a **temporal anomaly monitor** to detect stealthy **hardware Trojans** that evade traditional majority voting.
 
-The implementation is done at RTL level in Verilog and validated through simulation and waveform analysis.
+The design is implemented at **RTL level in Verilog** and validated through **simulation and waveform analysis**.
 
 ---
 
 ## Motivation
 
-Classic TMR systems typically assume that faults are transient, random, or isolated to a single replica.
+Classic TMR systems typically assume that faults are **transient**, **random**, or **isolated to a single replica**.
 
-However, **stealth hardware Trojans** can violate these assumptions by:
+However, stealth hardware Trojans can violate these assumptions by:
 - selectively corrupting outputs,
 - activating only under specific conditions, or
 - exploiting timing to evade instantaneous majority voting.
 
-This project demonstrates how **temporal behavior analysis** can be used to detect such attacks even when the TMR voter output appears correct.
+Related work has explored hardware Trojan detection using TMR in approximate synthesis contexts.  
+This project instead focuses on **temporal behavior analysis at RTL level**, demonstrating that time-domain monitoring can expose stealthy attacks even when instantaneous TMR outputs appear correct.
+
 
 ---
 
@@ -120,3 +122,9 @@ Temporal behavior reveals what instantaneous logic cannot.
 
 
 Enhancing TMR with lightweight temporal monitoring significantly improves resilience against stealth hardware Trojans without modifying the voting logic itself. 
+
+
+## Scope & Limitations
+This project focuses on RTL-level detection logic and simulation-based validation.
+While deployment on a physical FPGA platform was explored, the lack of a compatible board/package combination led to prioritizing architectural evaluation over board-specific integration.
+The detection mechanism itself is independent of the target FPGA and can be mapped to suitable platforms when required.
