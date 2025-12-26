@@ -35,44 +35,42 @@ The design is composed of a conventional TMR datapath augmented with additional 
 ---
 
 ## Architecture Overview
-
-## Architecture Overview
-
-```mermaid
+```
 graph TD
-  subgraph Top_Level["Top Level: tmr_trojan_top_mon.v"]
-    Input[System Input] --> RepA[Replica A]
-    Input --> RepB[Replica B]
-    Input --> RepC_Good[Replica C]
+  Title["Top Level Module<br/>tmr_trojan_top_mon.v"]
 
-    subgraph Trojan_Injection["Trojan Injection"]
-      RepC_Good --> TrojanMux[Trojan Mux]
-      Malicious[Malicious Signal] --> TrojanMux
-      Trigger[Trojan Trigger] -.-> TrojanMux
-    end
+  Title --> Input[System Input]
 
-    RepA -- r_a --> Voter[Majority Voter]
-    RepB -- r_b --> Voter
-    TrojanMux -- r_c --> Voter
+  Input --> RepA[Replica A]
+  Input --> RepB[Replica B]
+  Input --> RepC_Good[Replica C]
 
-    RepA -- r_a --> Monitor[Temporal Monitor]
-    RepB -- r_b --> Monitor
-    TrojanMux -- r_c --> Monitor
-
-    Voter --> Output[TMR Output]
-    Monitor --> Alarm[Suspicion Alarm]
+  subgraph Trojan_Injection["Trojan Injection"]
+    RepC_Good --> TrojanMux[Trojan Mux]
+    Malicious[Malicious Signal] --> TrojanMux
+    Trigger[Trojan Trigger] -.-> TrojanMux
   end
 
-  %% ===== Styling =====
-  classDef normal fill:#fdfdfd,stroke:#222,stroke-width:1px,color:#000
-  classDef trojan fill:#ffe6e6,stroke:#b30000,stroke-width:2px,color:#000
-  classDef monitor fill:#e6f0ff,stroke:#003d99,stroke-width:2px,color:#000
-  classDef alarm fill:#e6f0ff,stroke:#003d99,stroke-width:2px,color:#000
+  RepA -- r_a --> Voter[Majority Voter]
+  RepB -- r_b --> Voter
+  TrojanMux -- r_c --> Voter
 
-  class Input,RepA,RepB,RepC_Good,Voter,Output normal
+  RepA -- r_a --> Monitor[Temporal Monitor]
+  RepB -- r_b --> Monitor
+  TrojanMux -- r_c --> Monitor
+
+  Voter --> Output[TMR Output]
+  Monitor --> Alarm[Suspicion Alarm]
+
+  %% Styling
+  classDef normal fill:#fdfdfd,stroke:#222,color:#000
+  classDef trojan fill:#ffe6e6,stroke:#b30000,color:#000
+  classDef monitor fill:#e6f0ff,stroke:#003d99,color:#000
+
+  class Title,Input,RepA,RepB,RepC_Good,Voter,Output normal
   class TrojanMux,Malicious,Trigger trojan
-  class Monitor monitor
-  class Alarm alarm
+  class Monitor,Alarm monitor
+
 
 
 
