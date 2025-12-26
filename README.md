@@ -36,10 +36,11 @@ The design is composed of a conventional TMR datapath augmented with additional 
 
 ## Architecture Overview
 
-```mermaid
+## Architecture Overview
 
+```mermaid
 graph TD
-  subgraph Top_Level["Top Level tmr_trojan_top_mon.v"]
+  subgraph Top_Level["Top Level: tmr_trojan_top_mon.v"]
     Input[System Input] --> RepA[Replica A]
     Input --> RepB[Replica B]
     Input --> RepC_Good[Replica C]
@@ -62,11 +63,17 @@ graph TD
     Monitor --> Alarm[Suspicion Alarm]
   end
 
-  style TrojanMux fill:#f9d5d5,stroke:#b30000
-  style Malicious fill:#f9d5d5,stroke:#b30000
-  style Trigger fill:#f9d5d5,stroke:#b30000,stroke-dasharray:5 5
-  style Monitor fill:#d5e8f9,stroke:#005fb3,stroke-width:2px
-  style Alarm fill:#d5e8f9,stroke:#005fb3
+  %% ===== Styling =====
+  classDef normal fill:#fdfdfd,stroke:#222,stroke-width:1px,color:#000
+  classDef trojan fill:#ffe6e6,stroke:#b30000,stroke-width:2px,color:#000
+  classDef monitor fill:#e6f0ff,stroke:#003d99,stroke-width:2px,color:#000
+  classDef alarm fill:#e6f0ff,stroke:#003d99,stroke-width:2px,color:#000
+
+  class Input,RepA,RepB,RepC_Good,Voter,Output normal
+  class TrojanMux,Malicious,Trigger trojan
+  class Monitor monitor
+  class Alarm alarm
+
 
 
 ```
