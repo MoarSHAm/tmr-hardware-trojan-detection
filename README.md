@@ -34,6 +34,36 @@ The design is composed of a conventional TMR datapath augmented with additional 
 
 ---
 
+graph TD
+    subgraph Top Level: tmr_trojan_top_mon.v
+        Input[System Input] --> RepA[Replica Module A]
+        Input --> RepB[Replica Module B]
+        Input --> RepC_Good[Replica Module C]
+
+        subgraph Trojan Injection
+            RepC_Good --> TrojanMux[Trojan MUX]
+            Malicious[Malicious Signal] --> TrojanMux
+            Trigger[Trojan Trigger] -.-> TrojanMux
+        end
+
+        RepA -- r_a --> Voter[Majority Voter\ntmr_core.v]
+        RepB -- r_b --> Voter
+        TrojanMux -- r_c (corrupted) --> Voter
+
+        RepA -- r_a --> Monitor[Temporal Monitor\ntmr_monitor.v]
+        RepB -- r_b --> Monitor
+        TrojanMux -- r_c (corrupted) --> Monitor
+
+        Voter --> Output[TMR Output\n(Instantaneous)]
+        Monitor --> Alarm[Suspicion Alarm\n(Temporal)]
+    end
+
+    style TrojanMux fill:#f9d5d5,stroke:#b30000
+    style Malicious fill:#f9d5d5,stroke:#b30000
+    style Trigger fill:#f9d5d5,stroke:#b30000,stroke-dasharray: 5 5
+    style Monitor fill:#d5e8f9,stroke:#005fb3,stroke-width:2px
+    style Alarm fill:#d5e8f9,stroke:#005fb3
+
 ## Temporal Detection Principle
 
 Instead of reacting to single-cycle mismatches, the monitor observes replica behavior across time:
@@ -112,6 +142,18 @@ Simulation results show that:
 
 
 Waveform inspection confirms that temporal accumulation reveals attacks invisible to purely combinational logic.
+
+## Waveform Evidence (GTKWave)
+
+### 1. System initialization (no anomalies)
+![Initialization phase](images/phase1.jpg)
+
+### 2. Replica mismatch accumulation (output remains correct)
+![Mismatch accumulation](images/phase2.jpg)
+
+### 3. Temporal detection trigger
+![Trojan detected via temporal behavior](images/phase3.jpg)
+
 
 
 
