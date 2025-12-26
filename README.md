@@ -37,28 +37,29 @@ The design is composed of a conventional TMR datapath augmented with additional 
 ## Architecture Overview
 
 ```mermaid
+
 graph TD
-  subgraph Top_Level["Top Level: tmr_trojan_top_mon.v"]
-    Input[System Input] --> RepA[Replica Module A]
-    Input --> RepB[Replica Module B]
-    Input --> RepC_Good[Replica Module C]
+  subgraph Top_Level["Top Level tmr_trojan_top_mon.v"]
+    Input[System Input] --> RepA[Replica A]
+    Input --> RepB[Replica B]
+    Input --> RepC_Good[Replica C]
 
     subgraph Trojan_Injection["Trojan Injection"]
-      RepC_Good --> TrojanMux[Trojan MUX]
+      RepC_Good --> TrojanMux[Trojan Mux]
       Malicious[Malicious Signal] --> TrojanMux
       Trigger[Trojan Trigger] -.-> TrojanMux
     end
 
-    RepA -- r_a --> Voter[Majority Voter (tmr_core.v)]
+    RepA -- r_a --> Voter[Majority Voter]
     RepB -- r_b --> Voter
-    TrojanMux -- r_c corrupted --> Voter
+    TrojanMux -- r_c --> Voter
 
-    RepA -- r_a --> Monitor[Temporal Monitor (tmr_monitor.v)]
+    RepA -- r_a --> Monitor[Temporal Monitor]
     RepB -- r_b --> Monitor
-    TrojanMux -- r_c corrupted --> Monitor
+    TrojanMux -- r_c --> Monitor
 
-    Voter --> Output[TMR Output - Instantaneous]
-    Monitor --> Alarm[Suspicion Alarm - Temporal]
+    Voter --> Output[TMR Output]
+    Monitor --> Alarm[Suspicion Alarm]
   end
 
   style TrojanMux fill:#f9d5d5,stroke:#b30000
