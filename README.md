@@ -36,41 +36,48 @@ The design is composed of a conventional TMR datapath augmented with additional 
 
 ##Architectural Overview
 
-```mermaid
 graph TD
-  Title["Top Level Module<br/>tmr_trojan_top_mon.v"]
+```
+    %% Top level
+    Top["Top Level Module<br/>tmr_trojan_top_mon.v"]
 
-  Title --> Input[System Input]
+    Top --> Input["System Input"]
 
-  Input --> RepA[Replica A]
-  Input --> RepB[Replica B]
-  Input --> RepC_Good[Replica C]
+    %% Replicas
+    Input --> RepA["Replica A"]
+    Input --> RepB["Replica B"]
+    Input --> RepC["Replica C"]
 
-  subgraph Trojan_Injection["Trojan Injection"]
-    RepC_Good --> TrojanMux[Trojan Mux]
-    Malicious[Malicious Signal] --> TrojanMux
-    Trigger[Trojan Trigger] -.-> TrojanMux
-  end
+    %% Trojan Injection (applies only to Replica C output)
+    subgraph Trojan_Injection["Trojan Injection Logic"]
+        RepC --> TrojanMux["Trojan MUX"]
+        Malicious["Malicious Signal"] --> TrojanMux
+        Trigger["Trojan Trigger"] -.-> TrojanMux
+    end
 
-  RepA -- r_a --> Voter[Majority Voter]
-  RepB -- r_b --> Voter
-  TrojanMux -- r_c --> Voter
+    %% Majority voting
+    RepA -- r_a --> Voter["Majority Voter<br/>tmr_core.v"]
+    RepB -- r_b --> Voter
+    TrojanMux -- r_c (corrupted) --> Voter
+    Voter --> Output["TMR Output<br/>(Instantaneous)"]
 
-  RepA -- r_a --> Monitor[Temporal Monitor]
-  RepB -- r_b --> Monitor
-  TrojanMux -- r_c --> Monitor
+    %% Temporal monitoring
+    RepA -- r_a --> Monitor["Temporal Monitor<br/>tmr_monitor.v"]
+    RepB -- r_b --> Monitor
+    TrojanMux -- r_c (corrupted) --> Monitor
+    Monitor --> Alarm["Suspicion Alarm<br/>(Temporal)"]
 
-  Voter --> Output[TMR Output]
-  Monitor --> Alarm[Suspicion Alarm]
+    %% Styling
+    style TrojanMux fill:#ffd6d6,stroke:#b30000,stroke-width:2px
+    style Malicious fill:#ffd6d6,stroke:#b30000
+    style Trigger fill:#ffe6e6,stroke:#b30000,stroke-dasharray: 5 5
 
-  %% Styling
-  classDef normal fill:#ffffff,stroke:#222222,color:#000000
-  classDef trojan fill:#ffe6e6,stroke:#b30000,color:#000000
-  classDef monitor fill:#e6f0ff,stroke:#003d99,color:#000000
+    style Monitor fill:#e6f2ff,stroke:#005fb3,stroke-width:2px
+    style Alarm fill:#e6f2ff,stroke:#005fb3
 
-  class Title,Input,RepA,RepB,RepC_Good,Voter,Output normal
-  class TrojanMux,Malicious,Trigger trojan
-  class Monitor,Alarm monitor
+    style Voter fill:#f2f2f2,stroke:#333
+    style Output fill:#f2f2f2,stroke:#333
+
 
 
 
