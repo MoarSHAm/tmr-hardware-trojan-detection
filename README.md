@@ -34,8 +34,9 @@ The design is composed of a conventional TMR datapath augmented with additional 
 
 ---
 
-## Architecture Overview
-```
+##Architectural Overview
+
+```mermaid
 graph TD
   Title["Top Level Module<br/>tmr_trojan_top_mon.v"]
 
@@ -63,9 +64,9 @@ graph TD
   Monitor --> Alarm[Suspicion Alarm]
 
   %% Styling
-  classDef normal fill:#fdfdfd,stroke:#222,color:#000
-  classDef trojan fill:#ffe6e6,stroke:#b30000,color:#000
-  classDef monitor fill:#e6f0ff,stroke:#003d99,color:#000
+  classDef normal fill:#ffffff,stroke:#222222,color:#000000
+  classDef trojan fill:#ffe6e6,stroke:#b30000,color:#000000
+  classDef monitor fill:#e6f0ff,stroke:#003d99,color:#000000
 
   class Title,Input,RepA,RepB,RepC_Good,Voter,Output normal
   class TrojanMux,Malicious,Trigger trojan
