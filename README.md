@@ -33,6 +33,7 @@ The design is composed of a conventional TMR datapath augmented with additional 
   - raises suspicion only after persistent abnormal behavior
 
 ---
+
 ## Architecture Overview
 
 ```mermaid
@@ -48,16 +49,16 @@ graph TD
       Trigger[Trojan Trigger] -.-> TrojanMux
     end
 
-    RepA -- r_a --> Voter[Majority Voter<br/>tmr_core.v]
+    RepA -- r_a --> Voter[Majority Voter (tmr_core.v)]
     RepB -- r_b --> Voter
-    TrojanMux -- r_c (corrupted) --> Voter
+    TrojanMux -- r_c corrupted --> Voter
 
-    RepA -- r_a --> Monitor[Temporal Monitor<br/>tmr_monitor.v]
+    RepA -- r_a --> Monitor[Temporal Monitor (tmr_monitor.v)]
     RepB -- r_b --> Monitor
-    TrojanMux -- r_c (corrupted) --> Monitor
+    TrojanMux -- r_c corrupted --> Monitor
 
-    Voter --> Output[TMR Output<br/>(Instantaneous)]
-    Monitor --> Alarm[Suspicion Alarm<br/>(Temporal)]
+    Voter --> Output[TMR Output - Instantaneous]
+    Monitor --> Alarm[Suspicion Alarm - Temporal]
   end
 
   style TrojanMux fill:#f9d5d5,stroke:#b30000
@@ -65,6 +66,8 @@ graph TD
   style Trigger fill:#f9d5d5,stroke:#b30000,stroke-dasharray:5 5
   style Monitor fill:#d5e8f9,stroke:#005fb3,stroke-width:2px
   style Alarm fill:#d5e8f9,stroke:#005fb3
+
+
 ```
 
 ## Temporal Detection Principle
