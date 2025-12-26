@@ -35,51 +35,31 @@ The design is composed of a conventional TMR datapath augmented with additional 
 ---
 
 ##Architectural Overview
-```
 
+```mermaid
 graph TD
-    %% Top level
     Top["Top Level Module<br/>tmr_trojan_top_mon.v"]
     Top --> Input["System Input"]
 
-    %% Replicas
     Input --> RepA["Replica A"]
     Input --> RepB["Replica B"]
     Input --> RepC["Replica C"]
 
-    %% Trojan Injection (only affects Replica C output)
     subgraph Trojan_Injection["Trojan Injection Logic"]
         RepC --> TrojanMux["Trojan MUX"]
         Malicious["Malicious Signal"] --> TrojanMux
         Trigger["Trojan Trigger"] -.-> TrojanMux
     end
 
-    %% Majority voting
     RepA -- r_a --> Voter["Majority Voter<br/>tmr_core.v"]
     RepB -- r_b --> Voter
     TrojanMux -- r_c (corrupted) --> Voter
     Voter --> Output["TMR Output<br/>(Instantaneous)"]
 
-    %% Temporal monitoring
     RepA -- r_a --> Monitor["Temporal Monitor<br/>tmr_monitor.v"]
     RepB -- r_b --> Monitor
     TrojanMux -- r_c (corrupted) --> Monitor
     Monitor --> Alarm["Suspicion Alarm<br/>(Temporal)"]
-
-    %% Styling (strong contrast for GitHub dark mode)
-    style RepA fill:#ffffff,stroke:#000000,color:#000000
-    style RepB fill:#ffffff,stroke:#000000,color:#000000
-    style RepC fill:#ffffff,stroke:#000000,color:#000000
-
-    style Voter fill:#e0e0e0,stroke:#000000,color:#000000
-    style Output fill:#e0e0e0,stroke:#000000,color:#000000
-
-    style TrojanMux fill:#ffb3b3,stroke:#990000,stroke-width:2px,color:#000000
-    style Malicious fill:#ffcccc,stroke:#990000,color:#000000
-    style Trigger fill:#ffd6d6,stroke:#990000,stroke-dasharray: 5 5,color:#000000
-
-    style Monitor fill:#b3d9ff,stroke:#003366,stroke-width:2px,color:#000000
-    style Alarm fill:#b3d9ff,stroke:#003366,color:#000000
 
 
 
