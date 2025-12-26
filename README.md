@@ -33,36 +33,39 @@ The design is composed of a conventional TMR datapath augmented with additional 
   - raises suspicion only after persistent abnormal behavior
 
 ---
+## Architecture Overview
 
+```mermaid
 graph TD
-    subgraph Top Level: tmr_trojan_top_mon.v
-        Input[System Input] --> RepA[Replica Module A]
-        Input --> RepB[Replica Module B]
-        Input --> RepC_Good[Replica Module C]
+  subgraph Top_Level["Top Level: tmr_trojan_top_mon.v"]
+    Input[System Input] --> RepA[Replica Module A]
+    Input --> RepB[Replica Module B]
+    Input --> RepC_Good[Replica Module C]
 
-        subgraph Trojan Injection
-            RepC_Good --> TrojanMux[Trojan MUX]
-            Malicious[Malicious Signal] --> TrojanMux
-            Trigger[Trojan Trigger] -.-> TrojanMux
-        end
-
-        RepA -- r_a --> Voter[Majority Voter\ntmr_core.v]
-        RepB -- r_b --> Voter
-        TrojanMux -- r_c (corrupted) --> Voter
-
-        RepA -- r_a --> Monitor[Temporal Monitor\ntmr_monitor.v]
-        RepB -- r_b --> Monitor
-        TrojanMux -- r_c (corrupted) --> Monitor
-
-        Voter --> Output[TMR Output\n(Instantaneous)]
-        Monitor --> Alarm[Suspicion Alarm\n(Temporal)]
+    subgraph Trojan_Injection["Trojan Injection"]
+      RepC_Good --> TrojanMux[Trojan MUX]
+      Malicious[Malicious Signal] --> TrojanMux
+      Trigger[Trojan Trigger] -.-> TrojanMux
     end
 
-    style TrojanMux fill:#f9d5d5,stroke:#b30000
-    style Malicious fill:#f9d5d5,stroke:#b30000
-    style Trigger fill:#f9d5d5,stroke:#b30000,stroke-dasharray: 5 5
-    style Monitor fill:#d5e8f9,stroke:#005fb3,stroke-width:2px
-    style Alarm fill:#d5e8f9,stroke:#005fb3
+    RepA -- r_a --> Voter[Majority Voter<br/>tmr_core.v]
+    RepB -- r_b --> Voter
+    TrojanMux -- r_c (corrupted) --> Voter
+
+    RepA -- r_a --> Monitor[Temporal Monitor<br/>tmr_monitor.v]
+    RepB -- r_b --> Monitor
+    TrojanMux -- r_c (corrupted) --> Monitor
+
+    Voter --> Output[TMR Output<br/>(Instantaneous)]
+    Monitor --> Alarm[Suspicion Alarm<br/>(Temporal)]
+  end
+
+  style TrojanMux fill:#f9d5d5,stroke:#b30000
+  style Malicious fill:#f9d5d5,stroke:#b30000
+  style Trigger fill:#f9d5d5,stroke:#b30000,stroke-dasharray:5 5
+  style Monitor fill:#d5e8f9,stroke:#005fb3,stroke-width:2px
+  style Alarm fill:#d5e8f9,stroke:#005fb3
+```
 
 ## Temporal Detection Principle
 
