@@ -1,8 +1,8 @@
 # tmr-hardware-trojan-detection
 
-This project implements and evaluates a **Triple Modular Redundancy (TMR)** system augmented with a **temporal anomaly monitor** to detect stealthy **hardware Trojans** that evade traditional majority voting.
+Implementation of a **Triple Modular Redundancy (TMR)** system at **RTL level in Verilog** augmented with a **temporal anomaly monitor** to detect stealthy **hardware Trojans** that evade traditional majority voting.
 
-The design is implemented at **RTL level in Verilog** and validated through **simulation and waveform analysis**.
+The design is validated through simulation and waveform analysis.
 
 ---
 
@@ -92,10 +92,6 @@ This enables detection of stealthy Trojans that intentionally evade instantaneou
 Generated artifacts (bitstreams, waveforms, synthesis outputs) are intentionally excluded from version control.
 
 ---
-
-## Simulation and Evaluation
-
-The design is evaluated using RTL simulation. The testbench injects controlled mismatches to emulate stealthy Trojan behavior that intermittently corrupts one replica.
 
 ### Run simulation
 
